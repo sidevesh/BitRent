@@ -293,3 +293,111 @@ export function callBtcAddressLoad() { /*missing const and es6 syntax*/
     .catch((error) => {console.log(error);});
   }
 }
+
+/*============================================================*/
+
+export const callItemRead = (id) => ({
+  type: types.ITEM_READ,
+  id: id
+})
+
+export const callItemLoaded = (name, tariff, itype) => ({
+  type: types.ITEM_LOADED,
+  name: name,
+  tariff: tariff,
+  itype: itype
+})
+
+export const callItemAccepted = (time) => ({
+  type: types.ITEM_ACCEPT,
+  time: time
+})
+
+export const callItemDeclined = () => ({
+  type: types.ITEM_DECLINED
+})
+
+
+export const callItemStopped = (amount) => ({
+  type: types.ITEM_STOPPED,
+  amount: amount
+})
+
+export function callItemLoad(id) { /*missing const and es6 syntax*/
+  return function (dispatch, getState) {
+    return fetch(`https://area51-cryptothon.herokuapp.com/api/v1/items/`+id,
+      {
+        method: "GET",
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      }
+    )
+    .then(response => {
+      if(response.status === 200) {
+        return response.json();
+      }
+    })
+    .then((json) => {
+      console.log(json);
+      dispatch(callItemLoaded(json.name, json.tariff, json.itype));
+    })
+    .catch((error) => {console.log(error);});
+  }
+}
+
+export function callItemAccept(id) { /*missing const and es6 syntax*/
+  return function (dispatch, getState) {
+    return fetch(`https://area51-cryptothon.herokuapp.com/api/v1/items/`+id+'/accept',
+      {
+        method: "POST",
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          auth_token: getState().authState.auth_token,
+          email: 'syncoders@gmail.com'
+        })
+      }
+    )
+    .then(response => {
+      if(response.status === 200) {
+        return response.json();
+      }
+    })
+    .then((json) => {
+      console.log(json);
+      dispatch(callItemAccepted(json.time));
+    })
+    .catch((error) => {console.log(error);});
+  }
+}
+
+export function callItemStop(id) { /*missing const and es6 syntax*/
+  return function (dispatch, getState) {
+    return fetch(`https://area51-cryptothon.herokuapp.com/api/v1/items/`+id+'/stop',
+      {
+        method: "POST",
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          auth_token: getState().authState.auth_token
+        })
+      }
+    )
+    .then(response => {
+      if(response.status === 200) {
+        return response.json();
+      }
+    })
+    .then((json) => {
+      console.log(json);
+      dispatch(callItemStopped(json.bill));
+    })
+    .catch((error) => {console.log(error);});
+  }
+}

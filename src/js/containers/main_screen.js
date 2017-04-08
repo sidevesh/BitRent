@@ -42,6 +42,7 @@ class MainScreenComponent extends Component {
         }
         <Button onPress={()=>{this.props.btcAddressLoad()}} title="GO" />
         <Text>{this.props.json_str}</Text>
+        <Button onPress={()=>{Actions.registerScreen();}} title="SCAN" />
       </View>
     );
   }
