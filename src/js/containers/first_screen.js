@@ -6,7 +6,8 @@ import {
   Text,
   View,
   TextInput,
-  Button
+  Button,
+  Image
 } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
@@ -18,6 +19,8 @@ import { callFirstScreenEmailEdited,
          callSignIn,
          callFirstScreenChangePage } from '../actions';
 
+
+var isborder = false;
 class FirstScreenComponent extends Component {
 
   componentDidMount() {
@@ -30,35 +33,40 @@ class FirstScreenComponent extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <View style={[styles.container,this.border('blue')]}>
         {this.props.access_token !== '' && this.props.current_page === 'tabs' &&
-          <View style={styles.tab_container}>
-            <Button title="Sign In" color='green' onPress={()=>{this.props.changePage('in')}} />
-            <Button title="Sign Up" color='blue' onPress={()=>{this.props.changePage('up')}} />
-          </View>
+          <Image source={require('../../resources/main_back.jpg')} style={[styles.tab_container,this.border('yellow')]}>
+            <View style={[styles.img_container,this.border('yellow')]}>
+            </View>
+            <View style={[styles.button_container,this.border('cyan')]}>
+              <Button title="Sign In" color='orange' onPress={()=>{this.props.changePage('IN')}} />
+              <Button title="Sign Up" color='orange' onPress={()=>{this.props.changePage('UP')}} />
+            </View>
+          </Image> 
         }
         {this.props.access_token !== '' && this.props.current_page !== 'tabs' &&
           <View style={styles.form_container}>
-            <Text style={styles.title_text}>{'Sign '+this.props.current_page}</Text>
+            <Text style={styles.title_text}>{'SIGN '+this.props.current_page}</Text>
             <TextInput
-              style={{height: 60, fontSize: 30, width:300}}
+              style={{height: 60, fontSize: 20, width:300}}
               onChangeText={(text) => this.props.emailEdit(text)}
               value={this.props.field_email}
               maxLength={40}
               placeholder="Enter e-mail here"
             />
             <TextInput
-              style={{height: 60, fontSize: 30, width:300}}
+              style={{height: 60, fontSize: 20, width:300}}
               onChangeText={(text) => this.props.passwordEdit(text)}
               value={this.props.field_password}
               placeholder="Enter password here"
               secureTextEntry={true}
             />
-            <View style={styles.buttons_box}>
-              <Button title="Back" color='green' onPress={()=>{this.props.changePage('tabs')}} />
+            <View style={[styles.buttons_box,this.border('blue')]}>
+              <Button title={'\t\t\tBACK\t\t\t'} style={{flux:1,justifyContent:'center'}} color='orange' onPress={()=>{this.props.changePage('tabs')}} />
               <Button
-                title={'Sign '+this.props.current_page}
-                color='blue'
+                title={'\t\t\t\t\tSIGN '+this.props.current_page+'\t\t\t\t\t'}
+                style={{flux:2}}
+                color='cyan'
                 onPress={()=>{
                   if(this.props.current_page === 'up') {
                     this.props.signUp();
@@ -78,6 +86,13 @@ class FirstScreenComponent extends Component {
     );
   }
 
+  border(color){
+    return isborder?{
+      borderWidth:2,
+      borderColor: color
+    }:{}
+  }
+
 }
 
 const styles = StyleSheet.create({
@@ -89,16 +104,31 @@ const styles = StyleSheet.create({
   form_container: {
     flex: 1,
     justifyContent: 'center',
+    alignContent:"center",
     alignItems: 'center'
+  },
+  img_container:{
+    flex: 3
+  },
+  button_container:{
+    flex: 1,
+    flexDirection:'row',
+    justifyContent: 'space-around',
+    alignItems:"center",
+    alignContent:'center'
   },
   tab_container: {
     flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center'
+    width:'auto',
+    justifyContent: 'center',
+    alignContent:'center'
   },
   buttons_box: {
-    flexDirection: 'row'
+
+    flexDirection: 'row',
+    alignItems : "stretch",
+    justifyContent:"center",
+    width:'auto',
   },
   title_text: {
     fontSize: 50
