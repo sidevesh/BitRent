@@ -7,7 +7,8 @@ import {
   View,
   TextInput,
   Button,
-  Image
+  Image,
+  TouchableHighlight
 } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
@@ -33,20 +34,28 @@ class FirstScreenComponent extends Component {
 
   render() {
     return (
-      <View style={[styles.container,this.border('blue')]}>
+      <View style={styles.container}>
         {this.props.access_token !== '' && this.props.current_page === 'tabs' &&
           <Image source={require('../../resources/main_back.jpg')} style={[styles.tab_container,this.border('yellow')]}>
-            <View style={[styles.img_container,this.border('yellow')]}>
+            <View style={styles.img_container}>
             </View>
-            <View style={[styles.button_container,this.border('cyan')]}>
-              <Button title="Sign In" color='orange' onPress={()=>{this.props.changePage('IN')}} />
-              <Button title="Sign Up" color='orange' onPress={()=>{this.props.changePage('UP')}} />
+            <View style={styles.button_container}>
+              <TouchableHighlight style={{flex:0.5}} onPress={()=>{this.props.changePage('in')}}>
+                <View style={styles.butv2}>
+                  <Text style={styles.butvtext}>SIGN IN</Text>
+                </View>
+              </TouchableHighlight>
+              <TouchableHighlight style={{flex:0.5}} onPress={()=>{this.props.changePage('up')}}>
+                <View style={styles.butv1}>
+                  <Text style={styles.butvtext}>SIGN UP</Text>
+                </View>
+              </TouchableHighlight>
             </View>
           </Image> 
         }
         {this.props.access_token !== '' && this.props.current_page !== 'tabs' &&
           <View style={styles.form_container}>
-            <Text style={styles.title_text}>{'SIGN '+this.props.current_page}</Text>
+            <Text style={styles.title_text}>{'Sign '+this.props.current_page}</Text>
             <TextInput
               style={{height: 60, fontSize: 20, width:300}}
               onChangeText={(text) => this.props.emailEdit(text)}
@@ -61,12 +70,12 @@ class FirstScreenComponent extends Component {
               placeholder="Enter password here"
               secureTextEntry={true}
             />
-            <View style={[styles.buttons_box,this.border('blue')]}>
-              <Button title={'\t\t\tBACK\t\t\t'} style={{flux:1,justifyContent:'center'}} color='orange' onPress={()=>{this.props.changePage('tabs')}} />
+            <View style={styles.buttons_box}>
+              <Button title={'\t\t\tBACK\t\t\t'} style={{flex:1,justifyContent:'center'}} color='orange' onPress={()=>{this.props.changePage('tabs')}} />
               <Button
                 title={'\t\t\t\t\tSIGN '+this.props.current_page+'\t\t\t\t\t'}
                 style={{flux:2}}
-                color='cyan'
+                color='green'
                 onPress={()=>{
                   if(this.props.current_page === 'up') {
                     this.props.signUp();
@@ -80,7 +89,9 @@ class FirstScreenComponent extends Component {
           </View>
         }
         {this.props.access_token === '' &&
-          <Text>loading</Text>
+          <View style={styles.form_container}>
+            <Text style={styles.title_text}>loading...</Text>
+          </View>
         }
       </View>
     );
@@ -111,11 +122,23 @@ const styles = StyleSheet.create({
     flex: 3
   },
   button_container:{
-    flex: 1,
+    flex: 0.4,
     flexDirection:'row',
-    justifyContent: 'space-around',
-    alignItems:"center",
-    alignContent:'center'
+    alignItems:"stretch"
+  },
+  butv1: {
+    flex: 0.5,
+    backgroundColor: '#FF9900'
+  },
+  butv2: {
+    flex: 0.5,
+    backgroundColor: 'orange'
+  },
+  butvtext: {
+    fontWeight: '500',
+    color: '#FFFFFF',
+    fontSize: 26,
+    textAlign: 'center'
   },
   tab_container: {
     flex: 1,
@@ -124,7 +147,6 @@ const styles = StyleSheet.create({
     alignContent:'center'
   },
   buttons_box: {
-
     flexDirection: 'row',
     alignItems : "stretch",
     justifyContent:"center",

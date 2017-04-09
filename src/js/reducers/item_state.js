@@ -8,7 +8,6 @@ const initialState = {
   tariff: '',
   itype: '',
   accepted: false,
-  time: null,
   bill: null
 };
 
@@ -29,8 +28,7 @@ export default function itemState(state = initialState, action = {}) {
     case types.ITEM_ACCEPT:
       return {
         ...state,
-        accepted: true,
-        time: action.time
+        accepted: true
       };
     case types.ITEM_DECLINED:
       return {

@@ -349,6 +349,11 @@ export function callItemLoad(id) { /*missing const and es6 syntax*/
 
 export function callItemAccept(id) { /*missing const and es6 syntax*/
   return function (dispatch, getState) {
+    console.log(JSON.stringify({
+          auth_token: getState().authState.auth_token,
+          email: getState().firstScreenState.email_field
+        }));
+    console.log(id);
     return fetch(`https://area51-cryptothon.herokuapp.com/api/v1/items/`+id+'/accept',
       {
         method: "POST",
@@ -358,7 +363,7 @@ export function callItemAccept(id) { /*missing const and es6 syntax*/
         },
         body: JSON.stringify({
           auth_token: getState().authState.auth_token,
-          email: 'syncoders@gmail.com'
+          email: getState().firstScreenState.email_field
         })
       }
     )
@@ -369,7 +374,7 @@ export function callItemAccept(id) { /*missing const and es6 syntax*/
     })
     .then((json) => {
       console.log(json);
-      dispatch(callItemAccepted(json.time));
+      dispatch(callItemAccepted(json.updated_at));
     })
     .catch((error) => {console.log(error);});
   }
